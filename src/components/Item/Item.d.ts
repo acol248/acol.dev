@@ -9,7 +9,7 @@ interface ItemProps {
   description: string;
   body?: React.ReactNode;
   images?: Array<Image>;
-  links?: Array<{ label: string; href: string, icon?: React.ReactNode }>;
+  links?: Array<{ label: string; url: string, icon?: string }>;
 }
 
 export type { ItemProps };

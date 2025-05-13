@@ -1,4 +1,12 @@
-import { Root, Trigger, Portal, Overlay, Content, Title, Close } from "@radix-ui/react-dialog";
+import {
+  Root,
+  Trigger,
+  Portal,
+  Overlay,
+  Content,
+  Title,
+  Close,
+} from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 // styles
@@ -10,9 +18,24 @@ import { ItemProps } from "./Item.d";
 
 const mc = mapClassesCurried(maps, true);
 
-export default function Item({ className, title, description, body, links }: ItemProps) {
-  const triggerCL = useClassList({ defaultClass: "item", className, maps, string: true });
-  const contentCL = useClassList({ defaultClass: "content", maps, string: true });
+export default function Item({
+  className,
+  title,
+  description,
+  body,
+  links,
+}: ItemProps) {
+  const triggerCL = useClassList({
+    defaultClass: "item",
+    className,
+    maps,
+    string: true,
+  });
+  const contentCL = useClassList({
+    defaultClass: "content",
+    maps,
+    string: true,
+  });
 
   return (
     <Root>
@@ -38,15 +61,16 @@ export default function Item({ className, title, description, body, links }: Ite
 
           {links && links.length > 0 && (
             <div className={mc("content__links")}>
-              {links.map(({ label, href, icon }) => (
+              {links.map(({ label, url, icon }) => (
                 <a
                   className={mc("content__link")}
-                  href={href}
-                  key={label + href}
+                  href={url}
+                  key={label + url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {icon} {label}
+                  {icon && <div className={mc('content__icon-container')} dangerouslySetInnerHTML={{ __html: icon }} />}{" "}
+                  {label}
                 </a>
               ))}
             </div>
