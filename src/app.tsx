@@ -1,3 +1,5 @@
+import { useEffect, useState } from "preact/hooks";
+
 // assets
 import Profile from "./assets/profile.png";
 
@@ -12,17 +14,30 @@ import Footer from "./components/Footer";
 import useClassList, { mapClassesCurried } from "@blocdigital/useclasslist";
 import maps from "./app.module.scss";
 
+// types
+import type { Project } from "./types/projects";
+import getProjects from "./helpers/getProjects";
+
 const mc = mapClassesCurried(maps, true);
 
 export function App() {
   const classList = useClassList({ defaultClass: "app", maps, string: true });
+
+  const [projects, setProjects] = useState<Array<Project> | null>(null);
+
+  // fetch data from strapi api
+  useEffect(() => {
+    getProjects()
+      .then(setProjects)
+      .catch((err) => console.warn(err));
+  }, []);
 
   return (
     <>
       <Navbar
         items={[
           { label: "About", href: "#about" },
-          { label: "Projects", href: "#projects" },
+          ...(projects ? [{ label: "Projects", href: "#projects" }] : []),
         ]}
       />
 
@@ -35,7 +50,11 @@ export function App() {
             <img src={Profile} alt="acol profile" />
           </div>
 
-          <a className={mc("app__learn-more")} href="#about" aria-label="Learn more about me">
+          <a
+            className={mc("app__learn-more")}
+            href="#about"
+            aria-label="Learn more about me"
+          >
             <svg viewBox="0 -960 960 960">
               <path d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
             </svg>
@@ -46,13 +65,19 @@ export function App() {
           <h2>About Me</h2>
           <p>
             I am a Fullstack Web Developer at{" "}
-            <a href="https://bloc.digital/" target="_blank" rel="noreferrer" className={mc("home__bloc")}>
+            <a
+              href="https://bloc.digital/"
+              target="_blank"
+              rel="noreferrer"
+              className={mc("home__bloc")}
+            >
               Bloc Digital
             </a>
-            . The Bloc Digital website is an example of a project I have worked on. I work/have worked on a wide range
-            of different projects - from small single-page applications to complex systems. I am dedicated to self
-            improvement and constantly strive to make use of, and promote the use of, new and exciting technologies in
-            the space.
+            . The Bloc Digital website is an example of a project I have worked
+            on. I work/have worked on a wide range of different projects - from
+            small single-page applications to complex systems. I am dedicated to
+            self improvement and constantly strive to make use of, and promote
+            the use of, new and exciting technologies in the space.
           </p>
 
           <div className={mc("app__about-skills")}>
@@ -224,173 +249,38 @@ export function App() {
           </div>
 
           <p>
-            You can find me on <a href="https://github.com/acol248">GitHub @acol248</a> where I share my open source
-            projects. You can also find me on <a href="https://dev.to/acol">dev.to @acol</a> although I don't currently
-            post here too much. I also have a <a href="https://www.linkedin.com/in/alex-collyer/">LinkedIn</a> profile
-            for anyone that's relevant to. Hope to see you in the dev community! 😁
+            You can find me on{" "}
+            <a href="https://github.com/acol248">GitHub @acol248</a> where I
+            share my open source projects. You can also find me on{" "}
+            <a href="https://dev.to/acol">dev.to @acol</a> although I don't
+            currently post here too much. I also have a{" "}
+            <a href="https://www.linkedin.com/in/alex-collyer/">LinkedIn</a>{" "}
+            profile for anyone that's relevant to. Hope to see you in the dev
+            community! 😁
           </p>
         </section>
 
-        <section className={mc("app__projects")} id="projects">
-          <div className={mc("app__grid")}>
-            <h2>Projects</h2>
-            <p>
-              Here's a quick look at some of the personal software projects I've enjoyed building in my free time,
-              driven by curiosity and a love for creating.
-            </p>
+        {projects && projects.length > 0 && (
+          <section className={mc("app__projects")} id="projects">
+            <div className={mc("app__grid")}>
+              <h2>Projects</h2>
+              <p>
+                Here's a quick look at some of the personal software projects
+                I've enjoyed building in my free time, driven by curiosity and a
+                love for creating.
+              </p>
 
-            <Item
-              title="Dash Pi"
-              description="A dashboard camera application designed to run on a Raspberry Pi"
-              body={
-                <ItemLayout
-                  title="Dash Pi"
-                  body={
-                    <>
-                      A dashboard camera application designed to run on a Raspberry Pi, written in Python.
-                      <br />
-                      <br />
-                      Bursts of video are taken and saved to a local file system. The UI is accessible via a web browser
-                      on networks known to the Pi and is enabled optionally currently via the setup configuration,
-                      however this could be mapped to a physical function on the Pi in the future.
-                      <br />
-                      <br />
-                      The application is being developed with a Raspberry Pi Zero 2 and a Raspberry Pi 5 in mind.
-                    </>
-                  }
+              {projects.map(({ name, description, body, link }) => (
+                <Item
+                  title={name}
+                  description={description}
+                  body={<ItemLayout title={name} body={body} />}
+                  links={link}
                 />
-              }
-              links={[
-                {
-                  label: "Project source on GitHub",
-                  href: "https://github.com/acol248/dash-pi",
-                  icon: (
-                    <svg viewBox="0 0 24 24">
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-                    </svg>
-                  ),
-                },
-              ]}
-            />
-
-            <Item
-              title="Bills"
-              description="A basic application that helps the user keep track of their financial obligations"
-              body={
-                <ItemLayout
-                  title="Bills Web App"
-                  body={
-                    <>
-                      A basic application that helps the user keep track of their financial obligations. All app data is
-                      stored locally in the browser using localstorage. This is a frontend only application, built using
-                      React in Typescript.
-                      <br />
-                      <br />
-                      It makes use of a number of modern web APIs that not only run the core of the application, but add
-                      additional functionality (Web Vibration API).
-                    </>
-                  }
-                />
-              }
-              links={[
-                {
-                  label: "Try it out",
-                  href: "https://acol.dev/app/bills",
-                  icon: (
-                    <svg viewBox="0 -960 960 960">
-                      <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240q17 0 28.5 11.5T480-800q0 17-11.5 28.5T440-760H200v560h560v-240q0-17 11.5-28.5T800-480q17 0 28.5 11.5T840-440v240q0 33-23.5 56.5T760-120H200Zm560-584L416-360q-11 11-28 11t-28-11q-11-11-11-28t11-28l344-344H600q-17 0-28.5-11.5T560-800q0-17 11.5-28.5T600-840h200q17 0 28.5 11.5T840-800v200q0 17-11.5 28.5T800-560q-17 0-28.5-11.5T760-600v-104Z" />
-                    </svg>
-                  ),
-                },
-                {
-                  label: "Project source on GitHub",
-                  href: "https://github.com/acol248/bills",
-                  icon: (
-                    <svg viewBox="0 0 24 24">
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-                    </svg>
-                  ),
-                },
-              ]}
-            />
-
-            <Item
-              title="Plant Lapse"
-              description="A plant management script designed to run on a Raspberry Pi"
-              body={
-                <ItemLayout
-                  title="Plant Lapse"
-                  body={
-                    <>
-                      A plant management script designed to run on a Raspberry Pi, written in Python.
-                      <br />
-                      <br />
-                      The ultimate goal for this project is to create an application that runs on a Raspberry Pi that
-                      makes use of external sensors to monitor the health of plants. The application will be able to
-                      send alerts to the user when a plant is in need of care with historical data being stored,
-                      creating a timeline of the plant's life.
-                      <br />
-                      <br />
-                      This application is in the early stages of development, currently being designed for the Raspberry
-                      Pi 5 as my main development board.
-                    </>
-                  }
-                />
-              }
-              links={[
-                {
-                  label: "Project source on GitHub",
-                  href: "https://github.com/acol248/plant-lapse",
-                  icon: (
-                    <svg viewBox="0 0 24 24">
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-                    </svg>
-                  ),
-                },
-              ]}
-            />
-
-            <Item
-              title="Focus"
-              description="A basic experiment that makes use of the WakeLock API, now available in all mainstream browsers"
-              body={
-                <ItemLayout
-                  title="Focus Web App"
-                  body={
-                    <>
-                      A basic experiment that makes use of the WakeLock API, now available in all mainstream browsers.
-                      This is a frontend only application, built using React in Typescript.
-                      <br />
-                      <br />
-                      The goal is to encourage a user to put down their phone and focus on doing something in the real
-                      world
-                    </>
-                  }
-                />
-              }
-              links={[
-                {
-                  label: "Try it out",
-                  href: "https://acol.dev/app/focus",
-                  icon: (
-                    <svg viewBox="0 -960 960 960">
-                      <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240q17 0 28.5 11.5T480-800q0 17-11.5 28.5T440-760H200v560h560v-240q0-17 11.5-28.5T800-480q17 0 28.5 11.5T840-440v240q0 33-23.5 56.5T760-120H200Zm560-584L416-360q-11 11-28 11t-28-11q-11-11-11-28t11-28l344-344H600q-17 0-28.5-11.5T560-800q0-17 11.5-28.5T600-840h200q17 0 28.5 11.5T840-800v200q0 17-11.5 28.5T800-560q-17 0-28.5-11.5T760-600v-104Z" />
-                    </svg>
-                  ),
-                },
-                {
-                  label: "Project source on GitHub",
-                  href: "https://github.com/acol248/focus",
-                  icon: (
-                    <svg viewBox="0 0 24 24">
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
-                    </svg>
-                  ),
-                },
-              ]}
-            />
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />
