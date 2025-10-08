@@ -35,7 +35,11 @@ export function App() {
             <img src={Profile} alt="acol profile" />
           </div>
 
-          <a className={mc("app__learn-more")} href="#about" aria-label="Learn more about me">
+          <a
+            className={mc("app__learn-more")}
+            href="#about"
+            aria-label="Learn more about me"
+          >
             <svg viewBox="0 -960 960 960">
               <path d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
             </svg>
@@ -46,13 +50,19 @@ export function App() {
           <h2>About Me</h2>
           <p>
             I am a Fullstack Web Developer at{" "}
-            <a href="https://bloc.digital/" target="_blank" rel="noreferrer" className={mc("home__bloc")}>
+            <a
+              href="https://bloc.digital/"
+              target="_blank"
+              rel="noreferrer"
+              className={mc("home__bloc")}
+            >
               Bloc Digital
             </a>
-            . The Bloc Digital website is an example of a project I have worked on. I work/have worked on a wide range
-            of different projects - from small single-page applications to complex systems. I am dedicated to self
-            improvement and constantly strive to make use of, and promote the use of, new and exciting technologies in
-            the space.
+            . The Bloc Digital website is an example of a project I have worked
+            on. I work/have worked on a wide range of different projects - from
+            small single-page applications to complex systems. I am dedicated to
+            self improvement and constantly strive to make use of, and promote
+            the use of, new and exciting technologies in the space.
           </p>
 
           <div className={mc("app__about-skills")}>
@@ -233,10 +243,14 @@ export function App() {
           </div>
 
           <p>
-            You can find me on <a href="https://github.com/acol248">GitHub @acol248</a> where I share my open source
-            projects. You can also find me on <a href="https://dev.to/acol">dev.to @acol</a> although I don't currently
-            post here too much. I also have a <a href="https://www.linkedin.com/in/alex-collyer/">LinkedIn</a> profile
-            for anyone that's relevant to. Hope to see you in the dev community! 😁
+            You can find me on{" "}
+            <a href="https://github.com/acol248">GitHub @acol248</a> where I
+            share my open source projects. You can also find me on{" "}
+            <a href="https://dev.to/acol">dev.to @acol</a> although I don't
+            currently post here too much. I also have a{" "}
+            <a href="https://www.linkedin.com/in/alex-collyer/">LinkedIn</a>{" "}
+            profile for anyone that's relevant to. Hope to see you in the dev
+            community! 😁
           </p>
         </section>
 
@@ -244,8 +258,9 @@ export function App() {
           <div className={mc("app__grid")}>
             <h2>Projects</h2>
             <p>
-              Here's a quick look at some of the personal software projects I've enjoyed building in my free time,
-              driven by curiosity and a love for creating.
+              Here's a quick look at some of the personal software projects I've
+              enjoyed building in my free time, driven by curiosity and a love
+              for creating.
             </p>
 
             <Item
@@ -254,17 +269,24 @@ export function App() {
               body={
                 <ItemLayout
                   title="Dash Pi"
+                  date="2024 - 2025"
                   body={
                     <>
-                      A dashboard camera application designed to run on a Raspberry Pi, written in Python.
+                      An experimental project to play with the Raspberry Pi.
+                      <br />
+                      A dashboard camera application designed to run on a
+                      Raspberry Pi, written in Python.
                       <br />
                       <br />
-                      Bursts of video are taken and saved to a local file system. The UI is accessible via a web browser
-                      on networks known to the Pi and is enabled optionally currently via the setup configuration,
-                      however this could be mapped to a physical function on the Pi in the future.
+                      Bursts of video are taken and saved to a local file
+                      system. The UI is accessible via a web browser on networks
+                      known to the Pi and is enabled optionally currently via
+                      the setup configuration, however this could be mapped to a
+                      physical function on the Pi in the future.
                       <br />
                       <br />
-                      The application is being developed with a Raspberry Pi Zero 2 and a Raspberry Pi 5 in mind.
+                      The application is being developed with a Raspberry Pi
+                      Zero 2 and a Raspberry Pi 5 in mind.
                     </>
                   }
                 />
