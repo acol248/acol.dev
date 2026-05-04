@@ -1,4 +1,12 @@
-import { Root, Trigger, Portal, Overlay, Content, Title, Close } from "@radix-ui/react-dialog";
+import {
+  Root,
+  Trigger,
+  Portal,
+  Overlay,
+  Content,
+  Title,
+  Close,
+} from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 // styles
@@ -10,9 +18,25 @@ import { ItemProps } from "./Item.d";
 
 const mc = mapClassesCurried(maps, true);
 
-export default function Item({ className, title, description, body, links }: ItemProps) {
-  const triggerCL = useClassList({ defaultClass: "item", className, maps, string: true });
-  const contentCL = useClassList({ defaultClass: "content", maps, string: true });
+export default function Item({
+  className,
+  title,
+  description,
+  body,
+  links,
+  images,
+}: ItemProps) {
+  const triggerCL = useClassList({
+    defaultClass: "item",
+    className,
+    maps,
+    string: true,
+  });
+  const contentCL = useClassList({
+    defaultClass: "content",
+    maps,
+    string: true,
+  });
 
   return (
     <Root>
@@ -35,6 +59,19 @@ export default function Item({ className, title, description, body, links }: Ite
           </Close>
 
           {body}
+
+          {images && images.length > 0 && (
+            <div className={mc("content__images")}>
+              {images?.map(({ src, alt }) => (
+                <img
+                  className={mc("content__image")}
+                  src={src}
+                  alt={alt}
+                  key={src + alt}
+                />
+              ))}
+            </div>
+          )}
 
           {links && links.length > 0 && (
             <div className={mc("content__links")}>
