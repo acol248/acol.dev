@@ -13,7 +13,7 @@ export default function Navbar({ items }: { items?: Array<NavbarItem> }) {
   return (
     <nav className={classList}>
       <div className={mc("navbar__inner")}>
-        <a className={mc("navbar__link-logo")} href="#">
+        <a className={mc("navbar__link-logo")} href="/">
           acol.dev
         </a>
 
