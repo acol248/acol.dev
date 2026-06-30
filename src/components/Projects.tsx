@@ -6,6 +6,8 @@ import { projects } from "../data/projects";
 const mc = mapClassesCurried(maps, true);
 
 export default function Projects({ path }: { path?: string }) {
+  void path;
+
   const classList = useClassList({
     defaultClass: "projects-page",
     maps,
@@ -34,8 +36,8 @@ export default function Projects({ path }: { path?: string }) {
         <div className={mc("projects-page__grid")}>
           <h2>Personal Projects</h2>
           <p>
-            Here's a look at the personal software projects I've built in my free
-            time, driven by curiosity and a love for creating.
+            Here's a look at the personal software projects I've built in my
+            free time, driven by curiosity and a love for creating.
           </p>
 
           {projects.map((project) => (
